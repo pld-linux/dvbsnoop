@@ -1,7 +1,7 @@
 Summary:	An open source DVB/MPEG analyzer
 Name:		dvbsnoop
 Version:	1.4.50
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Applications
 Source0:	http://dl.sourceforge.net/dvbsnoop/%{name}-%{version}.tar.gz
