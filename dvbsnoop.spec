@@ -1,11 +1,12 @@
 Summary:	An open source DVB/MPEG analyzer
 Name:		dvbsnoop
 Version:	1.4.50
-Release:	2
+Release:	3
 License:	GPL v2+
 Group:		Applications
 Source0:	http://dl.sourceforge.net/dvbsnoop/%{name}-%{version}.tar.gz
 # Source0-md5:	68a5618c95b4372eea9ac5ec5005f299
+Patch0:		%{name}-c23.patch
 URL:		http://dvbsnoop.sourceforge.net/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -24,6 +25,7 @@ MRTG or gnuplot.
 
 %prep
 %setup -q
+%patch -P0 -p1
 
 %build
 %configure

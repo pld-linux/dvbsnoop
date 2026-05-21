@@ -1,0 +1,54 @@
+--- dvbsnoop-1.4.50/src/sections/sectables.c	2005-12-29 04:43:40.000000000 +0100
++++ dvbsnoop-1.4.50/src/sections/sectables.c	2026-05-21 01:21:53.385898265 +0200
+@@ -317,7 +317,7 @@
+ typedef struct _TABLE_IF_FUNC {
+     u_int    from;          /* e.g. from id 1  */
+     u_int    to;            /*      to   id 3  */
+-    void     (*func)();     /*      function for table decoding */
++    void     (*func)(u_char *b, int len); /* function for table decoding */
+ } TABLE_ID_FUNC;
+ 
+ 
+--- dvbsnoop-1.4.50/src/private/userdefs.h	2005-12-29 04:43:38.000000000 +0100
++++ dvbsnoop-1.4.50/src/private/userdefs.h	2026-05-21 01:21:53.385992529 +0200
+@@ -25,14 +25,14 @@
+ 
+ typedef struct _PRIVATE_SECTION_STRUCTURES_FUNC {
+     u_int    table_id;         	/* section table ID */
+-    void     (*func)();  	/* function for table decoding */
++    void     (*func)(u_char *b, int len); /* function for table decoding */
+ } PRIV_SECTION_ID_FUNC;
+ 
+ 
+ typedef struct _PRIVATE_DESCRIPTOR_STRUCTURES_FUNC {
+     u_int      descriptor_tag; 	/* descriptor tag ID */
+     DTAG_SCOPE tag_scope;	/* MPEG, DVB_SI, DSMCC_STREAM, ... */
+-    void       (*func)();  	/* function for descriptor decoding */
++    void       (*func)(u_char *b); /* function for descriptor decoding */
+ } PRIV_DESCR_ID_FUNC;
+ 
+ 
+--- dvbsnoop-1.4.50/src/private/userdefs.c	2005-12-29 04:43:38.000000000 +0100
++++ dvbsnoop-1.4.50/src/private/userdefs.c	2026-05-21 01:21:53.386061088 +0200
+@@ -69,7 +69,7 @@
+ 
+ typedef struct _PRIVATE_PROVIDER_FUNC {
+     char     *str;          /* e.g. "premiere.de" */
+-    void     (*func)();     /* function for getting table & descriptors */
++    void     (*func)(PRIV_SECTION_ID_FUNC **psect, PRIV_DESCR_ID_FUNC **pdesc); /* function for getting table & descriptors */
+ } PRIV_PROVIDER_FUNC;
+ 
+ 
+--- dvbsnoop-1.4.50/src/misc/sig_abort.c	2006-01-02 20:24:04.000000000 +0100
++++ dvbsnoop-1.4.50/src/misc/sig_abort.c	2026-05-21 01:21:53.386129119 +0200
+@@ -48,8 +48,8 @@
+ // catch these signals 
+ static struct {
+    	int 	sig;
+-   	void	(*new_handler)();
+-   	void	(*org_handler)();
++   	void	(*new_handler)(int sig_nr);
++   	void	(*org_handler)(int sig_nr);
+ } signalList[] = {
+ 	{ SIGHUP,  SmoothHandler,   NullHandler }, // -1  terminate smoothly
+ 	{ SIGQUIT, SmoothHandler,   NullHandler }, // -3  terminate smoothly
